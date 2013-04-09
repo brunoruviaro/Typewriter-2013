@@ -12,8 +12,8 @@
 
 
 ~playerName = "/player1" ; // player1, player2, etc; with slash & double quotes. Example: "/player1"
-~soundFolder = "Voice_1"; // name of the folder with samples. Example: "Drums"
-~folderPath = "/home/lork/Music/Typewriter/"; // path to Typewriter folder
+~soundFolder = "Bells"; // name of the folder with samples. Example: "Drums"
+~folderPath = "/home/lork/Music/typewriter/"; // path to Typewriter folder
 ~serverAddress = NetAddr("127.0.0.1", 57120); // address of main computer (to which messages are sent)
 (~folderPath++"Typewriter_Settings.scd").load; // load some settings
 (~folderPath++"Typewriter_Window.scd").load; // open the window for typing
