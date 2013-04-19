@@ -1,11 +1,12 @@
-// ****************************
+// *********************************
 // Typewriter 2013 - Window
-// ****************************
+// Last updated on April 18, 2013
+// *********************************
 //
 // This file creates the typing window that
 // - captures keystrokes
-// - sends text to main computer
-// - plays samples
+// - sends text to main computer via OSC
+// - plays samples (mono or stereo)
 
 (
 var key_a = 97; // unicode for character "a"
@@ -29,20 +30,26 @@ tex.keyDownAction =
 	destination.sendMsg(~playerName, tex.string); // send this out before anything else...
 
 	case
-	   	{(unicode >= key_A) && (unicode <= key_Z)} {bufnum = unicode - key_A; this_rate=0.6}
-		{(unicode >= key_a) && (unicode <= key_z)} {bufnum = unicode - key_a; this_rate=1}
-		{(unicode >= key_0) && (unicode <= key_9)} {bufnum = rrand(0, b.media.size-1); this_rate=5}
-		{(unicode >= 33) && (unicode <= 127)} {bufnum = rrand(0, b.media.size-1); this_rate=2}
-		{true} {bufnum = -1}; // flag: not a letter nor number; don't play anything
+	{(unicode >= key_A) && (unicode <= key_Z)} {bufnum = unicode - key_A; this_rate = 0.6 * ~transp.value}
+	{(unicode >= key_a) && (unicode <= key_z)} {bufnum = unicode - key_a; this_rate = 1 * ~transp.value}
+	{(unicode >= key_0) && (unicode <= key_9)} {bufnum = rrand(0, b.media.size-1); this_rate = 5}
+	{(unicode >= 33) && (unicode <= 127)} {bufnum = rrand(0, b.media.size-1); this_rate = 2}
+	{true} {bufnum = -1}; // flag: not a letter nor number; don't play anything
 
-         // ["key", unicode, "bufnum", b.media[bufnum], "rate", this_rate, "volume", ~amp].postln; // verbose
-	 ["key", char, unicode].postln;
+	// Call appropriate synth (mono or stereo) and post some info:
+	if( (bufnum != -1), {
 
-	 if( (bufnum != -1), {Synth("qwerty-sample-playback", [\bufnum, bufnum, \rate, this_rate])});
-         // Synth("qwerty-sine-playback", [\freq, keyToFreq+rrand(1, 10), \amp, amp]);
-	};
-win.front;
+		case
+		{b.media[bufnum].numChannels == 1} {Synth("qwerty-mono-sample-playback", [\bufnum, bufnum, \rate, this_rate])}
+		{b.media[bufnum].numChannels == 2} {Synth("qwerty-stereo-sample-playback", [\bufnum, bufnum, \rate, this_rate])};
+
+		["Letter: "++ char, "Playback Speed: " ++ this_rate, "Number of Channels: " ++ b.media[bufnum].numChannels].postln;
+		["Sound File: " ++ b.media[bufnum].path].postln;
+		" ".postln;
+	});
+};
+
 tex.font_(Font("Courier",40));
 tex.stringColor_(Color.black);
+win.front;
 )
-
