@@ -15,12 +15,11 @@ var key_A = 65; // unicode for character "A" (capital A)
 var key_Z = 90; // unicode for character "Z" (capital Z)
 var key_0 = 48; // unicode for character "0" (zero)
 var key_9 = 57; // unicode for character "9" (nine)
-var len = 350; // typing window size: length
-var hi = 380; // typing window size: height
+var len = 510; // typing window size: length
+var hi = 120; // typing window size: height
 
 var win = Window.new("play as you type",Rect(500,Window.screenBounds.height-600,len,hi));
 var tex = TextView(win.asView,Rect(10,10,len-20,hi-20)).focus(true);
-
 var destination = ~serverAddress;  // main computer address
 
 tex.keyDownAction =
@@ -49,7 +48,7 @@ tex.keyDownAction =
 	});
 };
 
-tex.font_(Font("Courier",40));
+tex.font_(Font("Courier",30));
 tex.stringColor_(Color.black);
 win.front;
 )
